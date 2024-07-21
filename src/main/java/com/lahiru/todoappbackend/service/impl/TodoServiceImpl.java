@@ -2,11 +2,14 @@ package com.lahiru.todoappbackend.service.impl;
 
 import com.lahiru.todoappbackend.dto.TodoDto;
 import com.lahiru.todoappbackend.entity.Todo;
+import com.lahiru.todoappbackend.exception.ResourceNotFoundException;
 import com.lahiru.todoappbackend.repository.TodoRepository;
 import com.lahiru.todoappbackend.service.TodoService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -23,5 +26,22 @@ public class TodoServiceImpl implements TodoService {
         Todo savedTodo = todoRepository.save(todo);
 
         return modelMapper.map(savedTodo, TodoDto.class);
+    }
+
+    @Override
+    public TodoDto getTodo(Long id) {
+
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Todo not found with id: " + id));
+
+        return modelMapper.map(todo, TodoDto.class);
+
+    }
+
+    @Override
+    public List<TodoDto> getAllTodos() {
+
+        List<Todo> todos = todoRepository.findAll();
+        return todos.stream().map(todo -> modelMapper.map(todo, TodoDto.class)).toList();
     }
 }

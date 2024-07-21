@@ -5,10 +5,9 @@ import com.lahiru.todoappbackend.service.TodoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/todos")
@@ -23,4 +22,15 @@ public class TodoController {
         return new ResponseEntity<>(savedTodo, HttpStatus.CREATED );
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<TodoDto> getTodo(@PathVariable("id") Long todoId) {
+        TodoDto todoDto =  todoService.getTodo(todoId);
+        return new ResponseEntity<>(todoDto, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TodoDto>> getAllTodos() {
+        List<TodoDto> todos = todoService.getAllTodos();
+        return ResponseEntity.ok(todos);
+    }
 }
