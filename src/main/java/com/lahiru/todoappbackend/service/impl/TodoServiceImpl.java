@@ -5,6 +5,7 @@ import com.lahiru.todoappbackend.entity.Todo;
 import com.lahiru.todoappbackend.repository.TodoRepository;
 import com.lahiru.todoappbackend.service.TodoService;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,23 +13,15 @@ import org.springframework.stereotype.Service;
 public class TodoServiceImpl implements TodoService {
 
     private TodoRepository todoRepository;
+
+    private ModelMapper modelMapper;
     @Override
     public TodoDto addTodo(TodoDto todoDto) {
 
-        Todo todo = new Todo();
-        todo.setTitle(todoDto.getTitle());
-        todo.setDescription(todoDto.getDescription());
-        todo.setCompleted(todoDto.isCompleted());
+        Todo todo = modelMapper.map(todoDto, Todo.class);
 
         Todo savedTodo = todoRepository.save(todo);
 
-        TodoDto savedTodoDto = new TodoDto(
-                savedTodo.getId(),
-                savedTodo.getTitle(),
-                savedTodo.getDescription(),
-                savedTodo.isCompleted()
-        );
-
-        return savedTodoDto;
+        return modelMapper.map(savedTodo, TodoDto.class);
     }
 }
