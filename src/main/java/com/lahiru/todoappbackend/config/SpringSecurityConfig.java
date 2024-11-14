@@ -3,6 +3,7 @@ package com.lahiru.todoappbackend.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableMethodSecurity
 public class SpringSecurityConfig {
 
     @Bean
@@ -33,15 +35,15 @@ public class SpringSecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(){
         UserDetails lahiru = User.builder()
-                .username("Lahiru")
+                .username("Admin")
                 .password(passwordEncoder().encode("password"))
-                .roles("USER")
+                .roles("ADMIN")
                 .build();
 
         UserDetails liam = User.builder()
                 .username("Liam")
                 .password(passwordEncoder().encode("password"))
-                .roles("ADMIN")
+                .roles("USER")
                 .build();
 
         return new InMemoryUserDetailsManager(lahiru, liam);
